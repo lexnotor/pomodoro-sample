@@ -1,38 +1,71 @@
-.App {
-  text-align: center;
+body {
+    background-color: rgb(16, 78, 88);
+    color: white;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.main-container {
+    text-align: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+h1 {
+    font-size: 4em;
+    font-weight: normal;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.param-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 50px;
+    font-size: 2em;
 }
 
-.App-link {
-  color: #61dafb;
+.param-container p {
+    margin: 5px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.param-container .arrow {
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.param-container .arrow:hover {
+    color: aqua;
+}
+
+.afficheur-contenaire {
+    border: 7px solid rgb(11, 54, 58);
+    border-radius: 20px;
+    width: fit-content;
+    margin: 5px auto;
+    padding: 20px 30px;
+}
+
+.afficheur-contenaire p {
+    font-size: 2em;
+    margin: 0px;
+}
+
+.afficheur-contenaire div {
+    font-size: 5em;
+}
+
+.control-conainer {
+    font-size: 2em;
+    margin: 30px auto;
+}
+
+.control-conainer span {
+    cursor: pointer;
+    margin: 10px;
+    transition: 0.5s;
+}
+
+.control-conainer span:hover {
+    color: aqua;
 }
