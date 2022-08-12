@@ -39,12 +39,21 @@ class Afficheur extends PureComponent {
     }
 
     play = () => {
+        clearTimeout(this.state.intervalId);
+
         this.setState({ canPlay: true});
     }
 
     pause = () => {
-        this.setState({ canChange: true, canPlay: false });
+        const id = setTimeout(() => this.setState(
+            { 
+                canChange: false,
+                canPlay: true
+            }),
+            60000 * this.state.breakLength
+        );
         clearInterval(this.state.intervalId);
+        this.setState({ canChange: true, canPlay: false, intervalId: id });
     }
 
     initialise = () => {
