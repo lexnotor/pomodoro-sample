@@ -10,7 +10,8 @@ const initValue = {
     breakLength: 5,
     canChange: true,
     intervalId: 0,
-    canPlay: false
+    canPlay: false,
+    isSession: true
 }
 
 class Afficheur extends PureComponent {
@@ -20,7 +21,7 @@ class Afficheur extends PureComponent {
     myref = React.createRef();
 
     changerMinutes = value => {
-        if (this.state.canChange && (this.state.minutes + value) >= 0) {
+        if (this.state.canChange && (this.state.minutes + value) > 0) {
             this.setState(prevState => ({
                 minSet: prevState.minutes + value,
                 secSet: 0,
@@ -31,7 +32,7 @@ class Afficheur extends PureComponent {
     };
 
     changeBreak = value => {
-        if (this.state.canChange && (this.state.breakLength + value) >= 0) {
+        if (this.state.canChange && (this.state.breakLength + value) > 0) {
             this.setState(prevState => ({
                 breakLength: prevState.breakLength + value
             }))
@@ -40,20 +41,12 @@ class Afficheur extends PureComponent {
 
     play = () => {
         clearTimeout(this.state.intervalId);
-
         this.setState({ canPlay: true});
     }
 
     pause = () => {
-        const id = setTimeout(() => this.setState(
-            { 
-                canChange: false,
-                canPlay: true
-            }),
-            60000 * this.state.breakLength
-        );
-        clearInterval(this.state.intervalId);
-        this.setState({ canChange: true, canPlay: false, intervalId: id });
+        clearTimeout(this.state.intervalId);
+        this.setState({ canChange: true, canPlay: false });
     }
 
     initialise = () => {
@@ -65,7 +58,8 @@ class Afficheur extends PureComponent {
         const {canPlay, minutes, secondes} = this.state;
 
         if (canPlay) {
-            setTimeout(() => {
+
+            const id = setTimeout(() => {
 
                 if ((minutes + secondes) !== 0) {
                     this.setState(
@@ -73,10 +67,28 @@ class Afficheur extends PureComponent {
                             minutes: secondes ? minutes : (minutes - 1), 
                             secondes: secondes ? secondes - 1 : 59
                         })
-                } else this.pause()
+                } else {
+                    if(this.state.isSession) {
+                        this.setState(
+                            {
+                                isSession: false,
+                                secondes: 0,
+                                minutes: prevState.breakLength
+                            }
+                        )
+                    } else {
+                        this.setState(
+                            {
+                                isSession: true,
+                                secondes: 0,
+                                minutes: prevState.minSet
+                            }
+                        )
+                    }
+                }
 
             }, 1000);
-            (prevState.canPlay !== canPlay) && this.setState({canChange: false})
+            (prevState.canPlay !== canPlay) && this.setState({canChange: false, intervalId: id})
         }
     }
 
@@ -92,7 +104,7 @@ class Afficheur extends PureComponent {
                 />
 
                 <div className='afficheur-contenaire'>
-                    <p>Session</p>
+                    <p> { this.state.isSession ? 'Session' : 'Break'} </p>
                     <div>
                         {minutes > 9 ? (minutes) : (`0${minutes}`)}
                         :
